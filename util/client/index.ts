@@ -1,0 +1,1 @@
+export { toLocale } from "./time";
