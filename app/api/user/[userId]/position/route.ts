@@ -7,6 +7,7 @@ import {
   prisma,
   createClient,
 } from "@/util/server";
+import { Exchange } from "@prisma/client";
 
 export const GET = async (
   req: NextRequest,
@@ -16,8 +17,8 @@ export const GET = async (
   const { userId } = params;
   const { searchParams } = req.nextUrl;
   try {
-    const type = searchParams.get("type");
-    if (!type) {
+    const exchange = searchParams.get("type") as Exchange;
+    if (!exchange) {
       r.statusCode = 400;
       r.response = {
         status: "failed",
@@ -26,7 +27,7 @@ export const GET = async (
       };
     } else {
       const secret = await prisma.secret.findFirst({
-        where: { userId, type },
+        where: { userId, exchange },
       });
       if (!secret) {
         r.statusCode = 400;
@@ -49,7 +50,7 @@ export const GET = async (
       }
     }
   } catch (err) {
-    return apiErrorHandler(err);
+    return apiErrorHandler(err, r);
   }
   return apiResponse(r);
 };
