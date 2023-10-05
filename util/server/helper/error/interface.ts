@@ -1,3 +1,6 @@
+import { AxiosError, AxiosResponse } from "axios";
+import { Response } from "..";
+
 export type ErrorType =
   | "DatabaseError"
   | "ValidateError"
@@ -5,6 +8,7 @@ export type ErrorType =
   | "AuthenticationError"
   | "UnknownError";
 
-export interface Errors extends Error {
+export interface Errors extends AxiosError {
   name: ErrorType;
+  response: AxiosResponse<Response<any>>;
 }

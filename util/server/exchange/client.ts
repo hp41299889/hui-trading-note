@@ -1,12 +1,13 @@
 import { Secret } from "@prisma/client";
 
 import { createUSDMClient } from "./binance";
+import { unknownErorr } from "..";
 
 export const createClient = async (secret: Secret) => {
   try {
-    const { type, apiKey, secretKey } = secret;
-    switch (type) {
-      case "binance": {
+    const { exchange, apiKey, secretKey } = secret;
+    switch (exchange) {
+      case "BINANCE": {
         return createUSDMClient(apiKey, secretKey);
       }
       default: {
@@ -14,6 +15,6 @@ export const createClient = async (secret: Secret) => {
       }
     }
   } catch (err) {
-    throw err;
+    throw unknownErorr("create exchange client error");
   }
 };

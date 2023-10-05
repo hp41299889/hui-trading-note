@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { ApiResponse } from "./interface";
+import { ApiResponse, Response } from "./interface";
 import { isErrors } from "@/util/server";
 
 export const response: ApiResponse<any> = {
@@ -16,33 +16,40 @@ export const apiResponse = <T>(response: ApiResponse<T>) => {
   return NextResponse.json(response.response, { status: response.statusCode });
 };
 
-export const apiErrorHandler = (err: unknown) => {
+export const apiErrorHandler = (err: unknown, response: ApiResponse<null>) => {
   console.error(err);
-  const r = { ...response };
   if (isErrors(err)) {
     switch (err.name) {
       case "DatabaseError": {
-        r.statusCode = 400;
-        r.response = {
+        response.statusCode = 400;
+        response.response = {
           status: "failed",
           message: err.message,
           data: null,
         };
-        return NextResponse.json(r, { status: r.statusCode });
+        return NextResponse.json(response.response, {
+          status: response.statusCode,
+        });
       }
       case "ValidateError": {
-        r.statusCode = 400;
-        r.response = {
+        response.statusCode = 400;
+        response.response = {
           status: "failed",
           message: err.message,
           data: null,
         };
-        return NextResponse.json(r, { status: r.statusCode });
+        return NextResponse.json(response, { status: response.statusCode });
       }
       default: {
-        return NextResponse.json(r, { status: r.statusCode });
+        response.statusCode = 400;
+        response.response = {
+          status: "failed",
+          message: response.response.message,
+          data: null,
+        };
+        return NextResponse.json(response, { status: response.statusCode });
       }
     }
   }
-  return NextResponse.json(r, { status: r.statusCode });
+  return NextResponse.json(response, { status: response.statusCode });
 };
