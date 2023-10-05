@@ -63,7 +63,7 @@ model Secret {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  type      String
+  exchange  Exchange
   apiKey    String
   secretKey String
   userId    String
@@ -79,27 +79,46 @@ model Mental {
   user      User     @relation(fields: [userId], references: [id])
 }
 
+enum Exchange {
+  BINANCE
+}
+
+enum OrderType {
+  LIMIT
+  MARKET
+  STOP
+  STOP_MARKET
+  TAKE_PROFIT
+  TAKE_PROFIT_MARKET
+  TRAILING_STOP_MARKET
+}
+
+enum OrderSide {
+  BUY
+  SELL
+}
+
 model Order {
-  id         String   @id
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  price      Decimal
-  amount     Decimal
-  takeProfit Decimal?
-  stopLose   Decimal?
-  reason     String?
-  userId     String
-  user       User     @relation(fields: [userId], references: [id])
+  id        String    @id
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  price     Decimal
+  amount    Decimal
+  type      OrderType
+  reason    String?
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
 }
 
 model HistoryOrder {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String    @id
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  orderSide OrderSide
   open      Decimal
   close     Decimal
   reason    String
   review    String?
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
 }

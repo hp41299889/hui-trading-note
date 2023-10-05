@@ -1,1 +1,1 @@
-export { getOrders } from "./api";
+export { postSecret, patchSecret } from "./api";

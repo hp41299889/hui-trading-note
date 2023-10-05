@@ -10,7 +10,7 @@ const Page = () => {
 
   useEffect(() => {
     if (session) {
-      router.push(`${session.user.id}/order`);
+      router.push(`${session.user.id}/home`);
     }
   }, [session, router]);
 
