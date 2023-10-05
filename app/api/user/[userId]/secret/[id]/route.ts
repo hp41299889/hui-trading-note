@@ -22,7 +22,7 @@ export const PATCH = async (
       data: secret,
     };
   } catch (err) {
-    return apiErrorHandler(err);
+    return apiErrorHandler(err, r);
   }
   return apiResponse(r);
 };
@@ -42,7 +42,7 @@ export const DELETE = async (
       data: secret,
     };
   } catch (err) {
-    return apiErrorHandler(err);
+    return apiErrorHandler(err, r);
   }
   return apiResponse(r);
 };

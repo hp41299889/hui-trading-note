@@ -12,3 +12,4 @@ export {
 } from "./helper";
 export type { Errors, Response, ApiResponse } from "./helper";
 export { createClient } from "./exchange/client";
+export { getOrders, getSecret } from "./render";

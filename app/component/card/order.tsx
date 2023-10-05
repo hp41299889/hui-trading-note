@@ -12,27 +12,72 @@ import Grid from "@mui/material/Unstable_Grid2";
 
 interface Props {
   orderId: string;
+  type: string;
   side: "BUY" | "SELL";
   symbol: string;
   time: string;
   price: number;
+  stopPrice: number;
   amount: number;
   reason?: string;
 }
 
 const OrderCard = (props: Props) => {
-  const { orderId, side, symbol, time, price, amount, reason } = props;
+  const {
+    orderId,
+    type,
+    side,
+    symbol,
+    time,
+    price,
+    stopPrice,
+    amount,
+    reason,
+  } = props;
+
+  console.log(side);
 
   const onUpdate = async (id: string) => {
     console.log(id);
   };
 
+  const orderType = (side: "BUY" | "SELL", type: string) => {
+    switch (side) {
+      case "BUY": {
+        switch (type) {
+          case "LIMIT": {
+            return "限價多";
+          }
+          case "STOP_MARKET": {
+            return "市價止損多";
+          }
+          case "TAKE_PROFIT_MARKET": {
+            return "市價止盈多";
+          }
+        }
+      }
+      case "SELL": {
+        switch (type) {
+          case "LIMIT": {
+            return "限價空";
+          }
+          case "STOP_MARKET": {
+            return "市價止損空";
+          }
+          case "TAKE_PROFIT_MARKET": {
+            return "市價止盈空";
+          }
+        }
+      }
+    }
+  };
+
   return (
-    <Card>
+    <Card className={side === "BUY" ? "bg-lime-300" : "bg-red-300"}>
       <CardHeader
         title={
           <Grid container>
-            <Grid lg>{side === "BUY" ? "多" : "空"}</Grid>
+            <Grid lg>{orderType(side, type)}</Grid>
             <Grid lg>{symbol}</Grid>
           </Grid>
         }
@@ -42,7 +87,7 @@ const OrderCard = (props: Props) => {
         <Grid container>
           <Grid lg={6}>
             <Typography>委託價格</Typography>
-            {price}
+            {price | stopPrice}
           </Grid>
           <Grid lg={6}>
             <Typography>數量</Typography>
